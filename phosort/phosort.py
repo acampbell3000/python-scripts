@@ -1,18 +1,18 @@
-######################################################
-#                                                    #
-# Photo and Video Sort script                        #
-#                                                    #
-# Simple scripts which aides in the maintainence     #
-# of a large photo / video collection. Sort output   #
-# structure:                                         #
-#                                                    #
-# /YYYY/Original Folder Names/File                   #
-#                                                    #
-# Author:  Anthony Campbell (anthonycampbell.co.uk)  #
-# Version: 0.0.1                                     #
-# Date:    22nd August, 2010                         #
-#                                                    #
-######################################################
+##############################################################
+#                                                            #
+# Photo and Video sort script                                #
+#                                                            #
+# Simple script which aides in the maintainence              #
+# of a large photo / video collection. Sort output           #
+# structure:                                                 #
+#                                                            #
+# /YYYY/Original Folder Names/File                           #
+#                                                            #
+# Author:  Anthony Campbell (anthonycampbell.co.uk)          #
+# Version: 0.0.1                                             #
+# Date:    22nd August, 2010                                 #
+#                                                            #
+##############################################################
 
 # Required imports
 import sys, os, glob, re
@@ -20,32 +20,63 @@ import sys, os, glob, re
 # Supported help flags
 _helpArgs = ("-help", "--help", "-?", "--?")
 _help = """
-    __file__ [option]
+    __file__ [directory] [option]
 
-    hi
+    Simple scripts which attempts to sort photo and video files in the
+    specified directory. Output produces the following format:
+
+        /YYYY/Original Folder Names/File
+
+    Directory:
+        Absolute or relative path to the directory being sorted. If this
+        argument is not provided the current directory will be used.
+
+    Options:
+        -s Option to replace directory and file name spaces with the "-"
+        character.
+
+        -r Option to rename all sorted files to reflect the parent directory
+        name and creation date.
+
+        -i Option to only sort images.
+
+        --help -help -? --? Option to display this text.
 """
 _help = _help.replace("__file__", __file__)
+
+# Supported flags
+_supportedOptions = ("-s", "-r", "-i") + _helpArgs
 
 # Supported image types
 _supportedImages = ()
 
-# Modes
+# Config
+_directory = os.getcwd()
 _replaceSpaces = False
 _renameFiles = False
 _imageOnly = False
 
-# Check for any flags
-for arg in sys.argv:
-    if arg == "-s":
+# Check for any options
+for _arg in sys.argv:
+    if _arg not in _supportedOptions and not _arg == __file__ and _directory == os.getcwd():
+        # Get first valid directory argument
+        _directory = _arg
+
+        # Validate
+        if not os.path.exists(_directory):
+            raise IOError("Provided directory does not exist!")
+        if not os.path.isdir(_directory):
+            raise IOError("Provided argument is not a directory!")
+    if _arg == "-s":
         print ("Need to replace spaces with -")
         _replaceSpaces = True
-    if arg == "-r":
+    if _arg == "-r":
         print ("Need to rename files during sort")
         _renameFiles = True
-    if arg == "-i":
+    if _arg == "-i":
         print ("Need to sort images only")
         _imageOnly = True
-    if arg in _helpArgs:
+    if _arg in _helpArgs:
         print (_help)
         exit(0)
 
@@ -62,17 +93,18 @@ def print_title(_title):
 # Begin
 print_title(_beginMessage)
 
-print ("\nCurrent working directory:", os.getcwd())
+print ("\nCurrent working directory:", _directory)
 print ("Replace spaces: ", _replaceSpaces)
 print ("Rename files:   ", _renameFiles)
 print ("Image only sort:", _imageOnly, "\n")
 
-#_currentDirectory = open(".")
+#_currentDirectory = open(_directory)
 #print (_currentDirectory)
 
-_d = glob.glob("*.jpg")
+_directoryListing = glob.glob("(.{1,2})?(*.jpg)?")
+_directoryListing = glob.glob(".|*.[jpg|JPG|JPEG|jpeg]")
 
-print (_d)
+print (_directoryListing)
 
 # End
 print_title(_endMessage)
