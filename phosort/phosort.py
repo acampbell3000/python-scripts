@@ -108,6 +108,7 @@ print ("Image only sort:", _imageOnly, "\n")
 _directoryListing = os.listdir(_directory)
 print (_directoryListing)
 
+
 #_directoryListing = glob.glob("(.{1,2})?(*.jpg)?")
 #_directoryListing = glob.glob(".|*.[jpg|JPG|JPEG|jpeg]")
 
