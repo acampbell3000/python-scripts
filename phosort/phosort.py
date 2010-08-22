@@ -8,9 +8,9 @@
 #                                                    #
 # /YYYY/Original Folder Names/File                   #
 #                                                    #
-# Anthony Campbell (anthonycampbell.co.uk)           #
+# Author:  Anthony Campbell (anthonycampbell.co.uk)  #
 # Version: 0.0.1                                     #
-# Date: 22nd August, 2010                            #
+# Date:    22nd August, 2010                         #
 #                                                    #
 ######################################################
 
@@ -70,7 +70,7 @@ print ("Image only sort:", _imageOnly, "\n")
 #_currentDirectory = open(".")
 #print (_currentDirectory)
 
-_d = glob.glob("*")
+_d = glob.glob("*.jpg")
 
 print (_d)
 
