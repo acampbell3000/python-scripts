@@ -15,7 +15,7 @@
 ######################################################
 
 # Required imports
-import sys, os, re
+import sys, os, glob, re
 
 # Supported help flags
 _helpArgs = ("-help", "--help", "-?", "--?")
@@ -25,6 +25,9 @@ _help = """
     hi
 """
 _help = _help.replace("__file__", __file__)
+
+# Supported image types
+_supportedImages = ()
 
 # Modes
 _replaceSpaces = False
@@ -64,7 +67,12 @@ print ("Replace spaces: ", _replaceSpaces)
 print ("Rename files:   ", _renameFiles)
 print ("Image only sort:", _imageOnly, "\n")
 
+#_currentDirectory = open(".")
+#print (_currentDirectory)
 
+_d = glob.glob("*")
+
+print (_d)
 
 # End
 print_title(_endMessage)
