@@ -46,14 +46,27 @@ for arg in sys.argv:
         print (_help)
         exit(0)
 
-# Begin
+# Declare Steps
 _beginMessage = "BEGIN phosort"
-print (_beginMessage)
-print (("=" * len(_beginMessage)), "\n")
-print ("Current working directory:", os.getcwd())
-print ("Replace directory / file name spaces:", _replaceSpaces)
-print ("Rename files:", _renameFiles)
+_endMessage = "END phosort"
+
+# Utility method to print titles
+def print_title(_title):
+    print (("=" * len(_title)))
+    print (_title)
+    print (("=" * len(_title)))
+
+# Begin
+print_title(_beginMessage)
+
+print ("\nCurrent working directory:", os.getcwd())
+print ("Replace spaces: ", _replaceSpaces)
+print ("Rename files:   ", _renameFiles)
 print ("Image only sort:", _imageOnly, "\n")
 
+
+
+# End
+print_title(_endMessage)
 
 
