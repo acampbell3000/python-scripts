@@ -86,9 +86,9 @@ _endMessage = "END phosort"
 
 # Utility method to print titles
 def print_title(_title):
-    print (("=" * len(_title)))
+    print (("\n" + ("=" * len(_title))))
     print (_title)
-    print (("=" * len(_title)))
+    print (("=" * len(_title)) + "\n")
 
 # Begin
 print_title(_beginMessage)
@@ -98,7 +98,7 @@ print ("Replace spaces: ", _replaceSpaces)
 print ("Rename files:   ", _renameFiles)
 print ("Image only sort:", _imageOnly, "\n")
 
-#_currentDirectory = open(_directory)
+_currentDirectory = os.listdir(_directory)
 #print (_currentDirectory)
 
 _directoryListing = glob.glob("(.{1,2})?(*.jpg)?")
