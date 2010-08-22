@@ -15,7 +15,7 @@
 ##############################################################
 
 # Required imports
-import sys, os, glob, re
+import sys, os, fnmatch, re
 
 # Supported help flags
 _helpArgs = ("-help", "--help", "-?", "--?")
@@ -80,9 +80,11 @@ for _arg in sys.argv:
         print (_help)
         exit(0)
 
-# Declare Steps
-_beginMessage = "BEGIN phosort"
-_endMessage = "END phosort"
+# Utility method to print titles
+def print_title(_title):
+    print (("\n" + ("=" * len(_title))))
+    print (_title)
+    print (("=" * len(_title)) + "\n")
 
 # Utility method to print titles
 def print_title(_title):
@@ -90,19 +92,24 @@ def print_title(_title):
     print (_title)
     print (("=" * len(_title)) + "\n")
 
+# Declare Steps
+_beginMessage = "BEGIN phosort"
+_endMessage = "END phosort"
+
 # Begin
 print_title(_beginMessage)
 
-print ("\nCurrent working directory:", _directory)
+print ("Current working directory:", _directory)
 print ("Replace spaces: ", _replaceSpaces)
 print ("Rename files:   ", _renameFiles)
 print ("Image only sort:", _imageOnly, "\n")
 
-_currentDirectory = os.listdir(_directory)
-#print (_currentDirectory)
+# Match supported files
+_directoryListing = os.listdir(_directory)
+print (_directoryListing)
 
-_directoryListing = glob.glob("(.{1,2})?(*.jpg)?")
-_directoryListing = glob.glob(".|*.[jpg|JPG|JPEG|jpeg]")
+#_directoryListing = glob.glob("(.{1,2})?(*.jpg)?")
+#_directoryListing = glob.glob(".|*.[jpg|JPG|JPEG|jpeg]")
 
 print (_directoryListing)
 
