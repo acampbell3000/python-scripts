@@ -1,18 +1,31 @@
-##############################################################
-#                                                            #
-# Photo and Video sort script                                #
-#                                                            #
-# Simple script which aides in the maintainence              #
-# of a large photo / video collection. Sort output           #
-# structure:                                                 #
-#                                                            #
-# /YYYY/Original Folder Names/File                           #
-#                                                            #
-# Author:  Anthony Campbell (anthonycampbell.co.uk)          #
-# Version: 0.0.1                                             #
-# Date:    22nd August, 2010                                 #
-#                                                            #
-##############################################################
+#!/usr/bin/python3
+#
+# Copyright 2010 Anthony Campbell (anthonycampbell.co.uk)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Photo and Video sort script
+
+Simple script which aides in the maintainence of a large photo / video
+collection. Sort output structure:
+
+    /YYYY/Original Folder Names/File
+    
+Author:  Anthony Campbell (anthonycampbell.co.uk)
+Version: 0.0.1
+Date:    22nd August, 2010
+"""
 
 # Required imports
 import sys, os, fnmatch, re
@@ -22,7 +35,7 @@ _helpArgs = ("-help", "--help", "-?", "--?")
 _help = """
     __file__ [directory] [option]
 
-    Simple scripts which attempts to sort photo and video files in the
+    Simple script which attempts to sort photo and video files in the
     specified directory. Output produces the following format:
 
         /YYYY/Original Folder Names/File
@@ -46,9 +59,6 @@ _help = _help.replace("__file__", __file__)
 
 # Supported flags
 _supportedOptions = ("-s", "-r", "-i") + _helpArgs
-
-# Supported image types
-_supportedImages = ()
 
 # Config
 _directory = os.getcwd()
@@ -80,14 +90,13 @@ for _arg in sys.argv:
         print (_help)
         exit(0)
 
-# Utility method to print titles
 def print_title(_title):
-    print (("\n" + ("=" * len(_title))))
-    print (_title)
-    print (("=" * len(_title)) + "\n")
+    """
+    Simple function print titles to the console in a consistent way.
 
-# Utility method to print titles
-def print_title(_title):
+    Args:
+        _title the title to print to the console.
+    """
     print (("\n" + ("=" * len(_title))))
     print (_title)
     print (("=" * len(_title)) + "\n")
@@ -108,6 +117,7 @@ print ("Image only sort:", _imageOnly, "\n")
 _directoryListing = os.listdir(_directory)
 print (_directoryListing)
 
+#if fnmatch.fnmatch(file, '*.txt'
 
 #_directoryListing = glob.glob("(.{1,2})?(*.jpg)?")
 #_directoryListing = glob.glob(".|*.[jpg|JPG|JPEG|jpeg]")
