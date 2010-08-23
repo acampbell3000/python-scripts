@@ -31,7 +31,7 @@ Date:    22nd August, 2010
 import sys, os, fnmatch, re
 
 # Supported help flags
-_helpArgs = ("-help", "--help", "-?", "--?")
+_help_args = ("-help", "--help", "-?", "--?")
 _help = """
     __file__ [directory] [option]
 
@@ -58,17 +58,17 @@ _help = """
 _help = _help.replace("__file__", __file__)
 
 # Supported flags
-_supportedOptions = ("-s", "-r", "-i") + _helpArgs
+_supported_options = ("-s", "-r", "-i") + _help_args
 
 # Config
 _directory = os.getcwd()
-_replaceSpaces = False
-_renameFiles = False
-_imageOnly = False
+_replace_spaces = False
+_rename_files = False
+_image_only = False
 
 # Check for any options
 for _arg in sys.argv:
-    if _arg not in _supportedOptions and not _arg == __file__ and _directory == os.getcwd():
+    if _arg not in _supported_options and not _arg == __file__ and _directory == os.getcwd():
         # Get first valid directory argument
         _directory = _arg
 
@@ -79,14 +79,14 @@ for _arg in sys.argv:
             raise IOError("Provided argument is not a directory!")
     if _arg == "-s":
         print ("Need to replace spaces with -")
-        _replaceSpaces = True
+        _replace_spaces = True
     if _arg == "-r":
         print ("Need to rename files during sort")
-        _renameFiles = True
+        _rename_files = True
     if _arg == "-i":
         print ("Need to sort images only")
-        _imageOnly = True
-    if _arg in _helpArgs:
+        _image_only = True
+    if _arg in _help_args:
         print (_help)
         exit(0)
 
@@ -101,33 +101,45 @@ def print_title(_title):
     print (_title)
     print (("=" * len(_title)) + "\n")
 
+def file_search(_directory):
+    """
+    Search for the supported file types in the provided directory. This
+    function is recursive and will also search sub-directories.
+
+    Args:
+        _directory the directory to search.
+    """
+    _matched_files = []
+    _directory_listing = os.listdir(_directory)
+    print (_directory_listing)
+
+    for _file in _directory_listing:
+        if fnmatch.fnmatch(_file, '*.jpg'):
+            _matched_files += [_file]
+        if os.path.isdir(_file):
+            
+
+    #_directory_listing = glob.glob("(.{1,2})?(*.jpg)?")
+    #_directory_listing = glob.glob(".|*.[jpg|JPG|JPEG|jpeg]")
+    return _matched_files
+
 # Declare Steps
-_beginMessage = "BEGIN phosort"
-_endMessage = "END phosort"
+_begin_message = "BEGIN phosort"
+_end_message = "END phosort"
 
 # Begin
-print_title(_beginMessage)
+print_title(_begin_message)
 
 print ("Current working directory:", _directory)
-print ("Replace spaces: ", _replaceSpaces)
-print ("Rename files:   ", _renameFiles)
-print ("Image only sort:", _imageOnly, "\n")
+print ("Replace spaces: ", _replace_spaces)
+print ("Rename files:   ", _rename_files)
+print ("Image only sort:", _image_only, "\n")
 
 # Match supported files
-_matchedFiles = ()
-_directoryListing = os.listdir(_directory)
-print (_directoryListing)
-
-for _file in _directoryListing:
-    if fnmatch.fnmatch(file, '*.txt')
-        _matchedFiles += file
-
-#_directoryListing = glob.glob("(.{1,2})?(*.jpg)?")
-#_directoryListing = glob.glob(".|*.[jpg|JPG|JPEG|jpeg]")
-
-print (_matchedFiles)
+_matched_files = file_search(_directory)
+print (_matched_files)
 
 # End
-print_title(_endMessage)
+print_title(_end_message)
 
 
