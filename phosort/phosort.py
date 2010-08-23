@@ -28,7 +28,10 @@ Date:    22nd August, 2010
 """
 
 # Required imports
-import sys, os, fnmatch, re
+import sys
+import os
+import fnmatch
+import re
 
 # Supported help flags
 _help_args = ("-help", "--help", "-?", "--?")
@@ -59,6 +62,9 @@ _help = _help.replace("__file__", __file__)
 
 # Supported flags
 _supported_options = ("-s", "-r", "-i") + _help_args
+
+# Supported files
+_supported_files = "*.jpg"
 
 # Config
 _directory = os.getcwd()
@@ -107,39 +113,72 @@ def file_search(_directory):
     function is recursive and will also search sub-directories.
 
     Args:
-        _directory the directory to search.
+        _directory the current directory to search.
+        _root the root directory of the search.
     """
+    # Initialise result
     _matched_files = []
+
+    # Get directory listing
     _directory_listing = os.listdir(_directory)
-    print (_directory_listing)
 
+    # Begin search
     for _file in _directory_listing:
-        if fnmatch.fnmatch(_file, '*.jpg'):
-            _matched_files += [_file]
-        if os.path.isdir(_file):
-            
+        # Maintain relative path
+        _file = os.path.join(_directory, _file)
 
-    #_directory_listing = glob.glob("(.{1,2})?(*.jpg)?")
-    #_directory_listing = glob.glob(".|*.[jpg|JPG|JPEG|jpeg]")
+        if fnmatch.fnmatch(_file, _supported_files):
+            _matched_files += [_file]
+
+        if os.path.isdir(_file):
+            _matched_files += file_search(_file)
     return _matched_files
 
-# Declare Steps
+def file_sort(_files_to_sort):
+    """
+    Sort the provided file list to take into account creation date.
+
+    Args:
+        _files_to_sort the list of files to sort.
+    """
+    # Initialise result
+    _successful_sort = False
+
+    # Begin file sort
+    for _file in _files_to_sort:
+        print (_file)
+
+    # _statinfo = os.stat(_file)
+    # _creation_date = os.path.getctime(_file)
+    # print (_creation_date)
+
+    return _successful_sort
+
+# Declare steps
 _begin_message = "BEGIN phosort"
 _end_message = "END phosort"
 
 # Begin
 print_title(_begin_message)
 
-print ("Current working directory:", _directory)
+print ("Directory:", _directory)
 print ("Replace spaces: ", _replace_spaces)
 print ("Rename files:   ", _rename_files)
 print ("Image only sort:", _image_only, "\n")
 
+# Change directory to search root
+os.chdir(_directory)
+
 # Match supported files
-_matched_files = file_search(_directory)
-print (_matched_files)
+print ("Begin search...")
+_matched_files = file_search(".")
+print ("Number of files found:", len(_matched_files))
+
+# Begin sort
+print ("Begin sort...")
+_result = file_sort(_matched_files)
+print ("Result:", _result)
 
 # End
 print_title(_end_message)
-
 
