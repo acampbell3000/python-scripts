@@ -114,15 +114,18 @@ print ("Rename files:   ", _renameFiles)
 print ("Image only sort:", _imageOnly, "\n")
 
 # Match supported files
+_matchedFiles = ()
 _directoryListing = os.listdir(_directory)
 print (_directoryListing)
 
-#if fnmatch.fnmatch(file, '*.txt'
+for _file in _directoryListing:
+    if fnmatch.fnmatch(file, '*.txt')
+        _matchedFiles += file
 
 #_directoryListing = glob.glob("(.{1,2})?(*.jpg)?")
 #_directoryListing = glob.glob(".|*.[jpg|JPG|JPEG|jpeg]")
 
-print (_directoryListing)
+print (_matchedFiles)
 
 # End
 print_title(_endMessage)

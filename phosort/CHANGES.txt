@@ -1,6 +1,9 @@
-Version 0.0.1
+Version 0.0.2
+
+Release notes 0.0.2 (TBA)
+- Match correct files within current directory.
 
 
-Release notes 0.0.1 (TBA)
+Release notes 0.0.1 (23rd August, 2010)
 
 - Initial release.
