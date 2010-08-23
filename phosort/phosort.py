@@ -30,8 +30,9 @@ Date:    22nd August, 2010
 # Required imports
 import sys
 import os
-import fnmatch
 import re
+import datetime
+import shutil
 
 # Supported help flags
 _help_args = ("-help", "--help", "-?", "--?")
@@ -56,21 +57,22 @@ _help = """
 
         -i Option to only sort images.
 
+        -d Option to only simulate and output the sort and to not persist any
+        changes. Allows changes to be viewed before persisting them.
+
         --help -help -? --? Option to display this text.
 """
 _help = _help.replace("__file__", __file__)
 
 # Supported flags
-_supported_options = ("-s", "-r", "-i") + _help_args
-
-# Supported files
-_supported_files = "*.jpg"
+_supported_options = ("-s", "-r", "-i", "-d") + _help_args
 
 # Config
 _directory = os.getcwd()
 _replace_spaces = False
 _rename_files = False
 _image_only = False
+_simulate_only = False
 
 # Check for any options
 for _arg in sys.argv:
@@ -92,6 +94,8 @@ for _arg in sys.argv:
     if _arg == "-i":
         print ("Need to sort images only")
         _image_only = True
+    if _arg == "-d":
+        _simulate_only = True
     if _arg in _help_args:
         print (_help)
         exit(0)
@@ -127,9 +131,13 @@ def file_search(_directory):
         # Maintain relative path
         _file = os.path.join(_directory, _file)
 
-        if fnmatch.fnmatch(_file, _supported_files):
+        # Match supported files
+        if re.match(".+(.jpg|.JPG|.jpeg|.JPEG)", _file):
+            _matched_files += [_file]
+        if not _image_only and re.match(".+(.avi|.AVI|.mov|.MOV)", _file):
             _matched_files += [_file]
 
+        # Search any sub-directories
         if os.path.isdir(_file):
             _matched_files += file_search(_file)
     return _matched_files
@@ -142,17 +150,37 @@ def file_sort(_files_to_sort):
         _files_to_sort the list of files to sort.
     """
     # Initialise result
-    _successful_sort = False
+    _count = 0
 
     # Begin file sort
     for _file in _files_to_sort:
-        print (_file)
+        # Get creation date
+        _creation_date = os.path.getctime(_file)
+        _date = datetime.date.fromtimestamp(_creation_date)
+        _year = str(_date.year)
 
-    # _statinfo = os.stat(_file)
-    # _creation_date = os.path.getctime(_file)
-    # print (_creation_date)
+        # Now move into year directory
+        _new_path = os.path.normpath(os.path.join(_year, _file))
+        _parents = _new_path[:_new_path.rfind("/")]
 
-    return _successful_sort
+        # Replace spaces if required
+        if _replace_spaces:
+            _new_path.replace(" ", "-")
+            _parents.replace(" ", "-")
+
+        if not os.path.exists(_new_path):
+            # Create parents
+            if not os.path.exists(_parents) and not _simulate_only:
+                os.makedirs(_parents)
+
+            # Move 
+            print (_file, "-->", _new_path)
+            if not _simulate_only:
+                shutil.move(_file, _new_path)
+                _count += 1
+    
+    # Return result
+    return _count
 
 # Declare steps
 _begin_message = "BEGIN phosort"
@@ -164,20 +192,21 @@ print_title(_begin_message)
 print ("Directory:", _directory)
 print ("Replace spaces: ", _replace_spaces)
 print ("Rename files:   ", _rename_files)
-print ("Image only sort:", _image_only, "\n")
+print ("Image only sort:", _image_only)
+print ("Simulate only:  ", _simulate_only)
 
 # Change directory to search root
 os.chdir(_directory)
 
 # Match supported files
-print ("Begin search...")
+print ("\nBegin search...")
 _matched_files = file_search(".")
 print ("Number of files found:", len(_matched_files))
 
 # Begin sort
-print ("Begin sort...")
-_result = file_sort(_matched_files)
-print ("Result:", _result)
+print ("\nBegin sort...")
+_total = file_sort(_matched_files)
+print ("Number of files moved:", _total)
 
 # End
 print_title(_end_message)
