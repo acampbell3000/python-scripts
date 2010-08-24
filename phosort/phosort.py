@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 #
 # Copyright 2010 Anthony Campbell (anthonycampbell.co.uk)
 #
@@ -18,7 +18,7 @@
 Photo and Video sort script
 
 Simple script which aides in the maintainence of a large photo / video
-collection. Sort output structure:
+collection. Sorts the provided directory into the following structure:
 
     /YYYY/Original Folder Names/File
     
@@ -32,7 +32,14 @@ import sys
 import os
 import re
 import datetime
+import time
 import shutil
+
+# Hachoir metdata dependencies
+import hachoir_core.config as hachoir_config
+from hachoir_core.cmd_line import unicodeFilename
+from hachoir_parser import createParser
+from hachoir_metadata import extractMetadata
 
 # Supported help flags
 _help_args = ("-help", "--help", "-?", "--?")
@@ -42,7 +49,7 @@ _help = """
     Simple script which attempts to sort photo and video files in the
     specified directory. Output produces the following format:
 
-        /YYYY/Original Folder Names/File [Timestamp]
+        /YYYY/Original Folder Names/File [timestamp]
 
     Directory:
         Absolute or relative path to the directory being sorted. If this
@@ -86,6 +93,23 @@ _image_only = False
 _file_copy = False
 _simulate_only = False
 
+def output(*_messages):
+    """
+    Simple function to print the provided message in a consistent
+    way between python2 and python3.
+
+    Args:
+        _message the message to print.
+    """
+    # Initialise result
+    _output = ""
+
+    # Concatenate tuple into single string
+    for _message in _messages:
+        _output += str(_message) + " "
+    print (_output)
+
+
 # Check for any options
 for _arg in sys.argv:
     if _arg not in _supported_options and not _arg == __file__ and _directory == os.getcwd():
@@ -110,7 +134,7 @@ for _arg in sys.argv:
     if _arg == "-t" or _arg == "-!":
         _simulate_only = True
     if _arg in _help_args:
-        print (_help)
+        output (_help)
         exit(0)
 
 
@@ -121,9 +145,34 @@ def print_title(_title):
     Args:
         _title the title to print to the console.
     """
-    print (("\n" + ("=" * len(_title))))
-    print (_title)
-    print (("=" * len(_title)) + "\n")
+    output (("\n" + ("=" * len(_title))))
+    output (_title)
+    output (("=" * len(_title)) + "\n")
+
+
+def get_creation_date(_path):
+    """
+    Simple function to retrieve the creation date from the file's metdata
+
+    Args:
+        _path the full path to the file.
+    """
+    # Initialise result
+    _creation_date = None
+
+    # Using the hachoir metadata library retrieve file metadata    
+    hachoir_config.quiet = True
+    try:
+        parser = createParser(unicodeFilename(_path), _path)
+        if parser:
+            metadata = extractMetadata(parser)
+            if metadata:
+                _creation_date = metadata.get("creation_date")
+    except Exception:
+        pass
+
+    # Return result
+    return _creation_date
 
 
 def rename_file(_filename, _date):
@@ -227,8 +276,11 @@ def file_sort(_files_to_sort):
     # Begin file sort
     for _file in _files_to_sort:
         # Get creation date
-        _creation_date = os.path.getctime(_file)
-        _date = datetime.date.fromtimestamp(_creation_date)
+        _date = get_creation_date(_file)
+        if not _date:
+            _creation_date = os.path.getctime(_file)
+            _date = datetime.date.fromtimestamp(_creation_date)
+
         _year = str(_date.year)
 
         # Update record
@@ -265,14 +317,14 @@ def file_sort(_files_to_sort):
             # Move / Copy
             if not _simulate_only:
                 if _file_copy:
-                    print (_file, "-+->", _new_path)
+                    output (_file, "-+->", _new_path)
                     shutil.copy2(_file, _new_path)
                 else:
-                    print (_file, "--->", _new_path)
+                    output (_file, "--->", _new_path)
                     shutil.move(_file, _new_path)
                 _count += 1
             else:
-                print (_file, "-!->", _new_path)
+                output (_file, "-!->", _new_path)
     
     # Return result
     return _count
@@ -284,31 +336,34 @@ _end_message = "END phosort"
 # Begin
 print_title(_begin_message)
 
-print ("Sort directory:           ", _directory)
-print ("Replace file spaces:      ", _replace_file_spaces)
-print ("Replace directory spaces: ", _replace_directory_spaces)
-print ("Rename files:             ", _rename_files)
-print ("Image only sort:          ", _image_only)
-print ("File copy:                ", _file_copy)
-print ("Simulate only:            ", _simulate_only)
+output ("Sort directory:           ", _directory)
+output ("Replace file spaces:      ", _replace_file_spaces)
+output ("Replace directory spaces: ", _replace_directory_spaces)
+output ("Rename files:             ", _rename_files)
+output ("Image only sort:          ", _image_only)
+output ("File copy:                ", _file_copy)
+output ("Simulate only:            ", _simulate_only)
 
 # Change directory to search root
 os.chdir(_directory)
+_start = time.time()
 
 # Match supported files
-print ("\nBegin search...")
+output ("\nBegin search...")
 _matched_files = file_search(".")
-print ("Number of files found:", len(_matched_files))
+output ("Number of files found:", len(_matched_files))
 
 # Begin sort
-print ("\nBegin sort...")
+output ("\nBegin sort...")
 _total = file_sort(_matched_files)
-print ("\nNumber of files moved:", _total)
+output ("\nNumber of files moved:", _total)
 
 # Prepare year report
+_elapsed = (time.time() - _start)
 _sorted_years.sort()
 _sorted_years = ",".join(_sorted_years).replace(",", ", ")
-print ("Sorted years:", _sorted_years)
+output ("Time elapsed:", _elapsed)
+output ("Sorted years:", _sorted_years)
 
 # End
 print_title(_end_message)

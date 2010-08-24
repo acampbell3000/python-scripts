@@ -24,10 +24,28 @@ Please look at the CHANGES file in each project to see what has
 changed since the last tag.
 
 ------------------------
+Dependencies:
+------------------------
+
+    hachoir-core-1.3.3
+    hachoir-parser-1.3.4
+    hachoir-metadata-1.3.3
+
+These packages are available from the ./dependencies directory.
+Simply unzip and run the "python setup.py install" command as root
+on all three libraries.
+
+------------------------
+Install:
+------------------------
+
+    python setup.py install
+
+------------------------
 Usage:
 ------------------------
 
-    python3 phosort.py [option]
+    phosort [directory] [option]
 
 ------------------------
 Contribute:
