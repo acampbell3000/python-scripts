@@ -11,10 +11,10 @@ echo "Setup complete"
 
 # Run test
 echo "Run sort..."
-python phosort.py test -! -r -s -d -c
+python phosort.py test -r -s -d -c
 echo "Sort complete"
 
 # Clean up
-#rm test -rf
+rm test -rf
 echo "Clean-up complete"
 
