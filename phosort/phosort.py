@@ -42,22 +42,23 @@ _help = """
     Simple script which attempts to sort photo and video files in the
     specified directory. Output produces the following format:
 
-        /YYYY/Original Folder Names/File
+        /YYYY/Original Folder Names/File [Timestamp]
 
     Directory:
         Absolute or relative path to the directory being sorted. If this
         argument is not provided the current directory will be used.
 
     Options:
-        -s Option to replace directory and file name spaces with the "-"
-        character.
+        -s Option to replace file name spaces with the "-" character.
+
+        -d Option to replace directory name spaces with the "-" character.
 
         -r Option to rename all sorted files to reflect the parent directory
         name and creation date.
 
         -i Option to only sort images.
 
-        -d Option to only simulate and output the sort and to not persist any
+        -t, -! Option to only simulate and output the sort and to not persist any
         changes. Allows changes to be viewed before persisting them.
 
         --help -help -? --? Option to display this text.
@@ -65,14 +66,19 @@ _help = """
 _help = _help.replace("__file__", __file__)
 
 # Supported flags
-_supported_options = ("-s", "-r", "-i", "-d") + _help_args
+_supported_options = ("-s", "-r", "-d", "-i", "-t", "-!") + _help_args
+
+# Supported file types regex
+_supported_images_regex = ".+(.jpg|.JPG|.jpeg|.JPEG)"
+_supported_movies_regex = ".+(.avi|.AVI|.mov|.MOV)"
 
 # Config
 _directory = os.getcwd()
-_replace_spaces = False
-_rename_files = False
-_image_only = False
-_simulate_only = False
+_rename_files = True
+_replace_file_spaces = True
+_replace_directory_spaces = True
+_image_only = True
+_simulate_only = True
 
 # Check for any options
 for _arg in sys.argv:
@@ -86,19 +92,19 @@ for _arg in sys.argv:
         if not os.path.isdir(_directory):
             raise IOError("Provided argument is not a directory!")
     if _arg == "-s":
-        print ("Need to replace spaces with -")
-        _replace_spaces = True
+        _replace_file_spaces = True
+    if _arg == "-d":
+        _replace_directory_spaces = True
     if _arg == "-r":
-        print ("Need to rename files during sort")
         _rename_files = True
     if _arg == "-i":
-        print ("Need to sort images only")
         _image_only = True
-    if _arg == "-d":
+    if _arg == "-t" or _arg == "-!":
         _simulate_only = True
     if _arg in _help_args:
         print (_help)
         exit(0)
+
 
 def print_title(_title):
     """
@@ -110,6 +116,62 @@ def print_title(_title):
     print (("\n" + ("=" * len(_title))))
     print (_title)
     print (("=" * len(_title)) + "\n")
+
+
+def rename_file(_filename, _date):
+    """
+    Simple function to re-name the provided file name to append a time
+    stamp.
+
+    Args:
+        _filename the file name to re-name.
+        _date the date to append to the file name.
+    """
+    # Initialise result
+    _new_filename = _filename
+    _timestamp = "-"
+
+    # Generate timestamp
+    if _date:
+        _day = str(_date.day)
+        _month = str(_date.month)
+        _year = str(_date.year)
+
+        if len(_day) < 2:
+            _day = "0" + _day
+        if len(_month) < 2:
+            _month = "0" + _month
+
+        _timestamp += _year + "-" + _month + "-" + _day
+
+    # Does timestamp already exist
+    _exist = re.search(r"\(([0-9\-\s]+|.*Jan.*|.*Feb.*|.*Mar.*|.*Apr.*|.*May.*|.*Jun.*|.*Jul.*|.*Aug.*|.*Sep.*|.*Oct.*|.*Nov.*|.*Dec.*)\)", _new_filename)
+    if _exist and not _exist.lastindex == None:
+        # If replacing spaces them we should remove brackets
+        if _replace_file_spaces:
+            _old_timestamp = _new_filename[_exist.start(0):_exist.end(0)]
+            _new_timestamp = _old_timestamp.replace("(", "").replace(")", "")
+            _new_filename = _new_filename.replace(_old_timestamp, _new_timestamp).lower()
+    else:
+        # Find image extension
+        _match = re.search(_supported_images_regex, _new_filename)
+        if _match and not _match.lastindex == None:
+            _start = _new_filename[:_match.start(1)]
+            _extension = _new_filename[_match.start(1):_match.end(1)]
+            _end = _new_filename[_match.end(1):]
+            _new_filename = _start + _timestamp + _extension + _end
+
+        else:
+            # Find movie extension
+            _match = re.search(_supported_movies_regex, _new_filename)
+            if _match and not _match.lastindex == None:
+                _start = _new_filename[:_match.start(1)]
+                _extension = _new_filename[_match.start(1):_match.end(1)]
+                _end = _new_filename[_match.end(1):]
+                _new_filename = _start + _timestamp + _extension + _end
+
+    return _new_filename
+
 
 def file_search(_directory):
     """
@@ -132,15 +194,16 @@ def file_search(_directory):
         _file = os.path.join(_directory, _file)
 
         # Match supported files
-        if re.match(".+(.jpg|.JPG|.jpeg|.JPEG)", _file):
+        if re.match(_supported_images_regex, _file):
             _matched_files += [_file]
-        if not _image_only and re.match(".+(.avi|.AVI|.mov|.MOV)", _file):
+        if not _image_only and re.match(_supported_movies_regex, _file):
             _matched_files += [_file]
 
         # Search any sub-directories
         if os.path.isdir(_file):
             _matched_files += file_search(_file)
     return _matched_files
+
 
 def file_sort(_files_to_sort):
     """
@@ -163,10 +226,23 @@ def file_sort(_files_to_sort):
         _new_path = os.path.normpath(os.path.join(_year, _file))
         _parents = _new_path[:_new_path.rfind("/")]
 
-        # Replace spaces if required
-        if _replace_spaces:
-            _new_path.replace(" ", "-")
-            _parents.replace(" ", "-")
+        # Update file name if required
+        if _rename_files:
+            _filename = os.path.basename(_new_path)
+            _new_filename = rename_file(_filename, _date)
+            _new_path = _new_path.replace(_filename, _new_filename)
+
+        # Replace file spaces if required
+        if _replace_file_spaces:
+            _filename = os.path.basename(_new_path)
+            _new_filename = _filename.replace(", ", "-").replace(" ", "-")
+            _new_path = _new_path.replace(_filename, _new_filename)
+
+        # Replace directory spaces if required
+        if _replace_directory_spaces:
+            _new_parents = _parents.replace(", ", "-").replace(" ", "-")
+            _new_path = _new_path.replace(_parents, _new_parents)
+            _parents = _new_parents
 
         if not os.path.exists(_new_path):
             # Create parents
@@ -189,11 +265,12 @@ _end_message = "END phosort"
 # Begin
 print_title(_begin_message)
 
-print ("Directory:", _directory)
-print ("Replace spaces: ", _replace_spaces)
-print ("Rename files:   ", _rename_files)
-print ("Image only sort:", _image_only)
-print ("Simulate only:  ", _simulate_only)
+print ("Sort directory:           ", _directory)
+print ("Replace file spaces:      ", _replace_file_spaces)
+print ("Replace directory spaces: ", _replace_directory_spaces)
+print ("Rename files:             ", _rename_files)
+print ("Image only sort:          ", _image_only)
+print ("Simulate only:            ", _simulate_only)
 
 # Change directory to search root
 os.chdir(_directory)
