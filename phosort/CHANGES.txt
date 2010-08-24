@@ -1,4 +1,8 @@
-Version 1.0.0
+Version 1.0.1
+
+- Release notes 1.0.1 (24th August, 2010)
+- Small improvements.
+- Introduction into copy only mode.
 
 Release notes 1.0.0 (24th August, 2010)
 - Match correct files within current directory.

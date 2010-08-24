@@ -58,6 +58,8 @@ _help = """
 
         -i Option to only sort images.
 
+        -c Copy the files to the new sorted location instead of a move.
+
         -t, -! Option to only simulate and output the sort and to not persist any
         changes. Allows changes to be viewed before persisting them.
 
@@ -66,11 +68,14 @@ _help = """
 _help = _help.replace("__file__", __file__)
 
 # Supported flags
-_supported_options = ("-s", "-r", "-d", "-i", "-t", "-!") + _help_args
+_supported_options = ("-s", "-r", "-d", "-i", "-c", "-t", "-!") + _help_args
 
 # Supported file types regex
 _supported_images_regex = ".+(.jpg|.JPG|.jpeg|.JPEG)"
 _supported_movies_regex = ".+(.avi|.AVI|.mov|.MOV)"
+
+# Report
+_sorted_years = []
 
 # Config
 _directory = os.getcwd()
@@ -78,6 +83,7 @@ _rename_files = False
 _replace_file_spaces = False
 _replace_directory_spaces = False
 _image_only = False
+_file_copy = False
 _simulate_only = False
 
 # Check for any options
@@ -97,6 +103,8 @@ for _arg in sys.argv:
         _replace_directory_spaces = True
     if _arg == "-r":
         _rename_files = True
+    if _arg == "-c":
+        _file_copy = True
     if _arg == "-i":
         _image_only = True
     if _arg == "-t" or _arg == "-!":
@@ -212,7 +220,8 @@ def file_sort(_files_to_sort):
     Args:
         _files_to_sort the list of files to sort.
     """
-    # Initialise result
+    # Initialise results
+    global _sorted_years
     _count = 0
 
     # Begin file sort
@@ -221,6 +230,10 @@ def file_sort(_files_to_sort):
         _creation_date = os.path.getctime(_file)
         _date = datetime.date.fromtimestamp(_creation_date)
         _year = str(_date.year)
+
+        # Update record
+        if _year not in _sorted_years:
+            _sorted_years += [_year]
 
         # Now move into year directory
         _new_path = os.path.normpath(os.path.join(_year, _file))
@@ -249,11 +262,17 @@ def file_sort(_files_to_sort):
             if not os.path.exists(_parents) and not _simulate_only:
                 os.makedirs(_parents)
 
-            # Move 
-            print (_file, "-->", _new_path)
+            # Move / Copy
             if not _simulate_only:
-                shutil.move(_file, _new_path)
+                if _file_copy:
+                    print (_file, "-+->", _new_path)
+                    shutil.copy2(_file, _new_path)
+                else:
+                    print (_file, "--->", _new_path)
+                    shutil.move(_file, _new_path)
                 _count += 1
+            else:
+                print (_file, "-!->", _new_path)
     
     # Return result
     return _count
@@ -270,6 +289,7 @@ print ("Replace file spaces:      ", _replace_file_spaces)
 print ("Replace directory spaces: ", _replace_directory_spaces)
 print ("Rename files:             ", _rename_files)
 print ("Image only sort:          ", _image_only)
+print ("File copy:                ", _file_copy)
 print ("Simulate only:            ", _simulate_only)
 
 # Change directory to search root
@@ -283,7 +303,12 @@ print ("Number of files found:", len(_matched_files))
 # Begin sort
 print ("\nBegin sort...")
 _total = file_sort(_matched_files)
-print ("Number of files moved:", _total)
+print ("\nNumber of files moved:", _total)
+
+# Prepare year report
+_sorted_years.sort()
+_sorted_years = ",".join(_sorted_years).replace(",", ", ")
+print ("Sorted years:", _sorted_years)
 
 # End
 print_title(_end_message)
