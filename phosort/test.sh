@@ -11,7 +11,7 @@ echo "Setup complete"
 
 # Run test
 echo "Run sort..."
-python3 phosort.py test -d
+python3 phosort.py test -!
 echo "Sort complete"
 
 # Clean up

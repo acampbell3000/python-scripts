@@ -74,11 +74,11 @@ _supported_movies_regex = ".+(.avi|.AVI|.mov|.MOV)"
 
 # Config
 _directory = os.getcwd()
-_rename_files = True
-_replace_file_spaces = True
-_replace_directory_spaces = True
-_image_only = True
-_simulate_only = True
+_rename_files = False
+_replace_file_spaces = False
+_replace_directory_spaces = False
+_image_only = False
+_simulate_only = False
 
 # Check for any options
 for _arg in sys.argv:

@@ -1,12 +1,13 @@
-Version 0.0.2
+Version 1.0.0
 
-Release notes 0.0.2 (TBA)
+Release notes 1.0.0 (24th August, 2010)
 - Match correct files within current directory.
 - Initial sort implementation.
 - Introduction to simulate only mode.
 - Introduction to image only mode.
 - Introduction to replace spaces for file and directory.
 - Introduction to timestamp file mode.
+- Final release.
 
 Release notes 0.0.1 (23rd August, 2010)
 
