@@ -1,4 +1,7 @@
-Version 1.0.3
+Version 1.0.4
+
+Release notes 1.0.4 (TBA)
+- 
 
 Release notes 1.0.3 (25th August, 2010)
 - Egg descriptor file introduction.
