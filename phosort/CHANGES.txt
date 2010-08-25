@@ -1,11 +1,10 @@
 Version 1.0.4
 
 Release notes 1.0.4 (TBA)
-- 
+- Upload to the cheese shop. 
 
 Release notes 1.0.3 (25th August, 2010)
 - Egg descriptor file introduction.
-- Upload to the cheese shop.
 
 Release notes 1.0.2 (25th August, 2010)
 - Removal of exif package dependency

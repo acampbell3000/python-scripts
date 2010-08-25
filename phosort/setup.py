@@ -51,14 +51,11 @@ setup (
     # PyPI egg details
     author = 'Anthony Campbell (anthonycampbell.co.uk)',
     author_email = 'acampbell3000 [[at] googlemail [dot]] com',
-
-    summary = """
-        Simple script to sort a directory of photos and videos. Designed
-        to break down a directory into yearly creation date sub directories.
-        Also rename files to provide a more consistent and readable listing.
-    """,
+    summary = 'Simple script to sort a directory of photos and videos.',
     url = 'http://pypi.python.org/pypi/phosort',
-    download_url = url + "#downloads",
+    download_url = 'http://pypi.python.org/pypi/phosort#downloads',
     license = 'Apache 2.0',
     long_description = long_description,
+    classifiers = CLASSIFIERS,
 )
+
