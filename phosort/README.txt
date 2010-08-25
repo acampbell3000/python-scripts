@@ -16,7 +16,7 @@ language governing permissions and limitations under the License.
 phosort
 --------------------------------------
 
-Simple script to sort and directory of photos and videos. Designed
+Simple script to sort a directory of photos and videos. Designed
 to break down a directory into yearly creation date sub directories.
 Also rename files to provide a more consistent and readable listing.
 

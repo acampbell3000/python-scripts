@@ -6,7 +6,7 @@ clear
 # Prepare test directory
 echo "Setup test environment..."
 mkdir -p test
-cp -R ./test-images/* test
+cp -R .* test
 echo "Setup complete"
 
 # Run test
