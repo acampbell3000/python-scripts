@@ -202,7 +202,7 @@ def rename_file(_filename, _date):
         _timestamp += _year + "-" + _month + "-" + _day
 
     # Does timestamp already exist
-    _exist = re.search(r"\(([0-9\-\s]+|.*Jan.*|.*Feb.*|.*Mar.*|.*Apr.*|.*May.*|.*Jun.*|.*Jul.*|.*Aug.*|.*Sep.*|.*Oct.*|.*Nov.*|.*Dec.*)\)", _new_filename)
+    _exist = re.search(r"\(([0-9\-\s]+|.*(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec).*)\)", _new_filename)
     if _exist and not _exist.lastindex == None:
         # If replacing spaces them we should remove brackets
         if _replace_file_spaces:
