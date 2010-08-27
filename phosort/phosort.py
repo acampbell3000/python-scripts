@@ -348,22 +348,35 @@ output ("Simulate only:            ", _simulate_only)
 os.chdir(_directory)
 _start = time.time()
 
-# Match supported files
-output ("\nBegin search...")
-_matched_files = file_search(".")
-output ("Number of files found:", len(_matched_files))
+# Cleaner exit for a keyboard interrupt
+try:
+    # Match supported files
+    output ("\nBegin search...")
+    _matched_files = file_search(".")
+    output ("Number of files found:", len(_matched_files))
 
-# Begin sort
-output ("\nBegin sort...")
-_total = file_sort(_matched_files)
-output ("\nNumber of files moved:", _total)
+    # Begin sort
+    output ("\nBegin sort...")
+    _total = file_sort(_matched_files)
+
+    if _file_copy:
+        output ("\nNumber of files copied:", _total)
+    else:
+        output ("\nNumber of files moved:", _total)
+except KeyboardInterrupt:
+    output ("KeyboardInterrupt:", "Stopping seach...")
 
 # Prepare year report
-_elapsed = (time.time() - _start)
 _sorted_years.sort()
 _sorted_years = ",".join(_sorted_years).replace(",", ", ")
+if _simulate_only:
+    output ("Years found:", _sorted_years)
+else:
+    output ("Years sorted:", _sorted_years)
+
+# End time
+_elapsed = (time.time() - _start)
 output ("Time elapsed:", _elapsed)
-output ("Sorted years:", _sorted_years)
 
 # End
 print_title(_end_message)
