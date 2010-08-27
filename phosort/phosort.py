@@ -78,8 +78,8 @@ _help = _help.replace("__file__", __file__)
 _supported_options = ("-s", "-r", "-d", "-i", "-c", "-t", "-!") + _help_args
 
 # Supported file types regex
-_supported_images_regex = ".+(.jpg|.JPG|.jpeg|.JPEG)"
-_supported_movies_regex = ".+(.avi|.AVI|.mov|.MOV)"
+_supported_images_regex = ".+\.(jpe?g)"
+_supported_movies_regex = ".+\.(avi|mov)"
 
 # Report
 _sorted_years = []
@@ -211,7 +211,7 @@ def rename_file(_filename, _date):
             _new_filename = _new_filename.replace(_old_timestamp, _new_timestamp).lower()
     else:
         # Find image extension
-        _match = re.search(_supported_images_regex, _new_filename)
+        _match = re.search(_supported_images_regex, _new_filename, flags=re.IGNORECASE)
         if _match and not _match.lastindex == None:
             _start = _new_filename[:_match.start(1)]
             _extension = _new_filename[_match.start(1):_match.end(1)]
@@ -220,7 +220,7 @@ def rename_file(_filename, _date):
 
         else:
             # Find movie extension
-            _match = re.search(_supported_movies_regex, _new_filename)
+            _match = re.search(_supported_movies_regex, _new_filename, flags=re.IGNORECASE)
             if _match and not _match.lastindex == None:
                 _start = _new_filename[:_match.start(1)]
                 _extension = _new_filename[_match.start(1):_match.end(1)]
@@ -251,9 +251,9 @@ def file_search(_directory):
         _file = os.path.join(_directory, _file)
 
         # Match supported files
-        if re.match(_supported_images_regex, _file):
+        if re.match(_supported_images_regex, _file, flags=re.IGNORECASE):
             _matched_files += [_file]
-        if not _image_only and re.match(_supported_movies_regex, _file):
+        if not _image_only and re.match(_supported_movies_regex, _file, flags=re.IGNORECASE):
             _matched_files += [_file]
 
         # Search any sub-directories
