@@ -38,7 +38,7 @@ long_description = open('README.txt').read() + open('CHANGES.txt').read()
 setup (
     # Package
     name = 'phosort',
-    version = '1.0.5',
+    version = '1.0.6',
     packages = find_packages(),
 
     # Package dependencies
