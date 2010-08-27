@@ -26,7 +26,7 @@ CLASSIFIERS = [
     'Development Status :: 3 - Alpha',
     'Environment :: Plugins',
     'Topic :: Utilities',
-    'License :: Apache 2.0',
+    'License :: OSI Approved :: Apache Software License',
     'Operating System :: OS Independent',
     'Natural Language :: English',
     'Programming Language :: Python']
@@ -38,7 +38,7 @@ long_description = open('README.txt').read() + open('CHANGES.txt').read()
 setup (
     # Package
     name = 'phosort',
-    version = '1.0.3',
+    version = '1.0.4',
     packages = find_packages(),
 
     # Package dependencies
@@ -50,11 +50,11 @@ setup (
 
     # PyPI egg details
     author = 'Anthony Campbell (anthonycampbell.co.uk)',
-    author_email = 'acampbell3000 [[at] googlemail [dot]] com',
+    #author_email = 'acampbell3000 [[at] googlemail [dot]] com',
     summary = 'Simple script to sort a directory of photos and videos.',
     url = 'http://pypi.python.org/pypi/phosort',
     download_url = 'http://pypi.python.org/pypi/phosort#downloads',
-    license = 'Apache 2.0',
+    license = 'License :: OSI Approved :: Apache Software License',
     long_description = long_description,
     classifiers = CLASSIFIERS,
 )

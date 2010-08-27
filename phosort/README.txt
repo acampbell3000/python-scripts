@@ -27,9 +27,9 @@ changed since the last tag.
 Dependencies:
 ------------------------
 
-    hachoir-core-1.3.3
-    hachoir-parser-1.3.4
-    hachoir-metadata-1.3.3
+    * hachoir-core-1.3.3
+    * hachoir-parser-1.3.4
+    * hachoir-metadata-1.3.3
 
 These packages are available from the ./dependencies directory.
 Simply unzip and run the "python setup.py install" command as root
