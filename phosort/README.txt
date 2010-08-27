@@ -36,8 +36,17 @@ Simply unzip and run the "python setup.py install" command as root
 on all three libraries.
 
 ------------------------
-Install:
+PIP install:
 ------------------------
+
+    pip install phosort
+
+------------------------
+Manual install:
+------------------------
+
+Download the provided source and execute it using the following
+command:
 
     python setup.py install
 
@@ -50,8 +59,17 @@ Usage:
 ------------------------
 Contribute:
 ------------------------
+
 If you wish to contribute to the project you can find the
 latest source code on GitHub:
 
-    http://wiki.github.com/acampbell3000/python-scripts/phosort
+    http://wiki.github.com/acampbell3000/python-scripts/
+
+------------------------
+Further information:
+------------------------
+
+phosort is now also available on PyPi Package Index (PyPI) (aka, the "Cheeseshop"):
+
+    http://pypi.python.org/pypi/phosort
 

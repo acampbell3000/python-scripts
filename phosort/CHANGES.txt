@@ -6,6 +6,7 @@ Release notes 1.0.5 (TBA)
 -------------------------
 
 - Updated to change log text to support reStructured text.
+- Uploaded release notes to reflect phosort PyPi upload location.
 
 Release notes 1.0.4 (27th August, 2010)
 ---------------------------------------
