@@ -77,7 +77,7 @@ _help = _help.replace("__file__", __file__)
 # Supported flags
 _supported_options = ("-s", "-r", "-d", "-i", "-c", "-t", "-!") + _help_args
 
-# Supported file types regex
+# Supported file types regex (case-insensitive)
 _supported_images_regex = ".+\.(jpe?g)"
 _supported_movies_regex = ".+\.(avi|mov)"
 
