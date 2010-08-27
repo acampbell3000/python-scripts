@@ -237,13 +237,17 @@ def file_search(_directory):
 
     Args:
         _directory the current directory to search.
-        _root the root directory of the search.
     """
     # Initialise result
     _matched_files = []
 
     # Get directory listing
-    _directory_listing = os.listdir(_directory)
+    _directory_listing = []
+
+    try:
+        _directory_listing = os.listdir(_directory)
+    except OSError:
+        return _directory_listing
 
     # Begin search
     for _file in _directory_listing:
@@ -312,7 +316,12 @@ def file_sort(_files_to_sort):
         if not os.path.exists(_new_path):
             # Create parents
             if not os.path.exists(_parents) and not _simulate_only:
-                os.makedirs(_parents)
+                try:
+                    os.makedirs(_parents)
+                except OSError as err:
+                    output ("Could not create folder: ", err)
+                    continue
+
 
             # Move / Copy
             if not _simulate_only:
@@ -353,6 +362,11 @@ try:
     # Match supported files
     output ("\nBegin search...")
     _matched_files = file_search(".")
+
+    if not _matched_files:
+        output ("No files could be found or the directory could not be read.")
+        sys.exit()
+
     output ("Number of files found:", len(_matched_files))
 
     # Begin sort
