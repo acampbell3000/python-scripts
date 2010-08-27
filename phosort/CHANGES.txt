@@ -2,8 +2,8 @@
 Version 1.0.5
 =============
 
-Release notes 1.0.5 (TBA)
--------------------------
+Release notes 1.0.5 (27th August, 2010)
+---------------------------------------
 
 - Updated to change log text to support reStructured text.
 - Uploaded release notes to reflect phosort PyPi upload location.
