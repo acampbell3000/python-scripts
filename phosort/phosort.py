@@ -171,6 +171,11 @@ def get_creation_date(_path):
     except Exception:
         pass
 
+    # Validate and use ctime if not available
+    if not _creation_date:
+        _ctime = os.path.getctime(_path)
+        _creation_date = datetime.datetime.fromtimestamp(_ctime)
+
     # Return result
     return _creation_date
 
@@ -260,8 +265,8 @@ def file_search(_directory):
         if not _image_only and re.match(_supported_movies_regex, _file, flags=re.IGNORECASE):
             _matched_files += [_file]
 
-        # Search any sub-directories
-        if os.path.isdir(_file):
+        # Search sub-directories which haven't already been sorted
+        if os.path.isdir(_file) and not re.match("^\./(19|20|21)\d\d.*$", _file):
             _matched_files += file_search(_file)
     return _matched_files
 
@@ -281,10 +286,6 @@ def file_sort(_files_to_sort):
     for _file in _files_to_sort:
         # Get creation date
         _date = get_creation_date(_file)
-        if not _date:
-            _creation_date = os.path.getctime(_file)
-            _date = datetime.date.fromtimestamp(_creation_date)
-
         _year = str(_date.year)
 
         # Update record

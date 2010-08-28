@@ -2,9 +2,14 @@
 Version 1.0.7
 =============
 
-Release notes 1.0.7 (TBA)
+Release notes 1.0.7 (28th August, 2010)
 ---------------------------------------
-- 
+- Added graceful handling of private ('-r') folders on Linux.
+- Added a clarity comment for case-insensitive filetype regex. 
+- Shortened the date matching regex to include fewer greedy quantifiers while
+    still matching the same date format.
+- Fixed a small bug in the regexes used to identify allowed file types.
+- Fixed recurrsive bug where previous sorted media is re-sorted.
 
 Release notes 1.0.6 (27th August, 2010)
 ---------------------------------------

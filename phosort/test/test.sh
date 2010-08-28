@@ -7,6 +7,7 @@ clear
 echo "Setup test environment..."
 mkdir -p bin
 cp -R *.* bin
+cp -R *sub* bin
 echo "Setup complete"
 
 # Run test

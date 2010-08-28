@@ -50,7 +50,7 @@ setup (
 
     # PyPI egg details
     author = 'Anthony Campbell (anthonycampbell.co.uk)',
-    author_email = 'acampbell3000 [[at] googlemail [dot]] com',
+    author_email = 'acampbell3000 @ mail from google',
     summary = 'Simple script to sort a directory of photos and videos.',
     url = 'http://pypi.python.org/pypi/phosort',
     download_url = 'http://pypi.python.org/pypi/phosort#downloads',

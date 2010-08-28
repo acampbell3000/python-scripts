@@ -73,3 +73,9 @@ phosort is now also available on PyPi Package Index (PyPI) (aka, the "Cheeseshop
 
     http://pypi.python.org/pypi/phosort
 
+------------------------
+Special thanks:
+------------------------
+
+To Alex Elder (alexelder.co.uk) for his numerous fixes and improvements. Cheers dude!
+
