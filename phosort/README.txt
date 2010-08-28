@@ -54,7 +54,7 @@ command:
 Usage:
 ------------------------
 
-    phosort [directory] [option]
+    python phosort.py [directory] [option]
 
 ------------------------
 Contribute:
