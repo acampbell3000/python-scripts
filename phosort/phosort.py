@@ -380,7 +380,7 @@ try:
     else:
         output ("\nNumber of files moved:", _total)
 except KeyboardInterrupt:
-    output ("KeyboardInterrupt:", "Stopping seach...")
+    output ("KeyboardInterrupt:", "Stopping search...")
 
 # Prepare year report
 _sorted_years.sort()

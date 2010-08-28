@@ -52,6 +52,7 @@ setup (
     author = 'Anthony Campbell (anthonycampbell.co.uk)',
     author_email = 'acampbell3000 @ mail from google',
     summary = 'Simple script to sort a directory of photos and videos.',
+    keywords = 'media, metadata, file, sort, sorting',
     url = 'http://pypi.python.org/pypi/phosort',
     download_url = 'http://pypi.python.org/pypi/phosort#downloads',
     license = 'License :: OSI Approved :: Apache Software License',

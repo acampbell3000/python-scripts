@@ -4,7 +4,9 @@ Version 1.0.8
 
 Release notes 1.0.8 (TBA)
 ---------------------------------------
-- 
+- Updated usage notes.
+- Add keywords to setup.py.
+- Output typo fix.
 
 Release notes 1.0.7 (28th August, 2010)
 ---------------------------------------
