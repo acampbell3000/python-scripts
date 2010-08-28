@@ -218,18 +218,19 @@ def rename_file(_filename, _date):
         # Find image extension
         _match = re.search(_supported_images_regex, _new_filename, flags=re.IGNORECASE)
         if _match and not _match.lastindex == None:
-            _start = _new_filename[:_match.start(1)]
-            _extension = _new_filename[_match.start(1):_match.end(1)]
-            _end = _new_filename[_match.end(1):]
+            # Insert timestamp before extension
+            _start = _new_filename[:_match.start(_match.lastindex) - 1]
+            _extension = _new_filename[_match.start(_match.lastindex) - 1:_match.end(_match.lastindex)]
+            _end = _new_filename[_match.end(_match.lastindex):]
             _new_filename = _start + _timestamp + _extension + _end
-
         else:
             # Find movie extension
             _match = re.search(_supported_movies_regex, _new_filename, flags=re.IGNORECASE)
             if _match and not _match.lastindex == None:
-                _start = _new_filename[:_match.start(1)]
-                _extension = _new_filename[_match.start(1):_match.end(1)]
-                _end = _new_filename[_match.end(1):]
+                # Insert timestamp before extension
+                _start = _new_filename[:_match.start(_match.lastindex) - 1]
+                _extension = _new_filename[_match.start(_match.lastindex) - 1:_match.end(_match.lastindex)]
+                _end = _new_filename[_match.end(_match.lastindex):]
                 _new_filename = _start + _timestamp + _extension + _end
 
     return _new_filename
