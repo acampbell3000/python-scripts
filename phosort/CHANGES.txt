@@ -15,11 +15,11 @@ Release notes 1.0.7 (28th August, 2010)
 - Shortened the date matching regex to include fewer greedy quantifiers while
     still matching the same date format.
 - Fixed a small bug in the regexes used to identify allowed file types.
-- Fixed recurrsive bug where previous sorted media is re-sorted.
+- Fixed recursive bug where previous sorted media is re-sorted.
 
 Release notes 1.0.6 (27th August, 2010)
 ---------------------------------------
-- Keyboard interupt handling.
+- Keyboard interrupt handling.
 - Test script updates.
 - Improved output.
 
@@ -43,7 +43,7 @@ Release notes 1.0.3 (25th August, 2010)
 Release notes 1.0.2 (25th August, 2010)
 ---------------------------------------
 
-- Removal of exif package dependency
+- Removal of EXIF package dependency
 - Introduction to the hachoir metadata library.
 - Provision of hachoir libraries.
 - Retrieve real creation date for videos and images from meta data.
